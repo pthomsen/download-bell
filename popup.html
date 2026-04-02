@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    :root {
+      --bg:      #1e1e2e;
+      --surface: #2a2a3e;
+      --border:  #3a3a5c;
+      --text:    #cdd6f4;
+      --muted:   #7f849c;
+      --accent:  #89b4fa;
+      --ok:      #a6e3a1;
+      --err:     #f38ba8;
+      --radius:  7px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-size: 13px;
+      background: var(--bg);
+      color: var(--text);
+      width: 310px;
+      padding: 14px 16px 12px;
+      line-height: 1.4;
+    }
+
+    /* ── Header ──────────────────────────────────────── */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .title {
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: -0.01em;
+    }
+
+    /* ── Toggle switch ───────────────────────────────── */
+    .switch { position: relative; display: inline-block; width: 36px; height: 20px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .track {
+      position: absolute; inset: 0;
+      background: var(--border);
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .track::before {
+      content: '';
+      position: absolute;
+      width: 14px; height: 14px;
+      left: 3px; bottom: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.18s;
+    }
+    input:checked + .track { background: var(--accent); }
+    input:checked + .track::before { transform: translateX(16px); }
+
+    /* ── Divider ─────────────────────────────────────── */
+    hr { border: none; border-top: 1px solid var(--border); margin: 2px 0; }
+
+    /* ── Volume row ──────────────────────────────────── */
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+    }
+    .row-label { color: var(--muted); width: 58px; flex-shrink: 0; }
+    input[type=range] {
+      flex: 1;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+    .vol-val { width: 34px; text-align: right; color: var(--accent); font-weight: 500; }
+
+    /* ── Sound section ───────────────────────────────── */
+    .section { padding: 10px 0; }
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-weight: 500;
+      margin-bottom: 7px;
+    }
+    .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot.ok  { background: var(--ok); }
+    .dot.err { background: var(--err); }
+
+    .sound-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sound-label.custom { color: var(--accent); }
+
+    /* ── Per-file trim row (only shown with custom sound) ── */
+    .trim-row {
+      display: none;
+      padding: 3px 0 6px;
+    }
+    .trim-row.visible { display: flex; }
+
+    .btn-row { display: flex; gap: 5px; }
+
+    button {
+      flex: 1;
+      padding: 5px 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 11px;
+      font-family: inherit;
+      white-space: nowrap;
+      transition: background 0.13s, border-color 0.13s;
+    }
+    button:hover:not(:disabled) {
+      background: var(--border);
+      border-color: var(--accent);
+    }
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── Footer ──────────────────────────────────────── */
+    .footer {
+      margin-top: 10px;
+      font-size: 10px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    input[type=file] { display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="title">🔔 Download Bell</div>
+    <label class="switch">
+      <input type="checkbox" id="toggle" checked>
+      <span class="track"></span>
+    </label>
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <span class="row-label">Volume</span>
+    <input type="range" id="volume" min="0" max="1" step="0.05" value="0.8">
+    <span class="vol-val" id="vol-label">80%</span>
+  </div>
+
+  <hr>
+
+  <div class="section">
+    <div class="section-head"><span class="dot ok"></span> On Complete</div>
+    <div class="sound-label" id="complete-name">Default (built-in)</div>
+    <div class="trim-row row" id="complete-trim-row">
+      <span class="row-label">Level</span>
+      <input type="range" id="complete-trim" min="0" max="1" step="0.05" value="1">
+      <span class="vol-val" id="complete-trim-label">100%</span>
+    </div>
+    <div class="btn-row">
+      <button id="complete-default">Default</button>
+      <button id="complete-upload-btn">Upload…</button>
+      <input type="file" id="complete-upload" accept="audio/*">
+      <button id="complete-preview">▶ Test</button>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="section">
+    <div class="section-head"><span class="dot err"></span> On Failure</div>
+    <div class="sound-label" id="fail-name">Default (built-in)</div>
+    <div class="trim-row row" id="fail-trim-row">
+      <span class="row-label">Level</span>
+      <input type="range" id="fail-trim" min="0" max="1" step="0.05" value="1">
+      <span class="vol-val" id="fail-trim-label">100%</span>
+    </div>
+    <div class="btn-row">
+      <button id="fail-default">Default</button>
+      <button id="fail-upload-btn">Upload…</button>
+      <input type="file" id="fail-upload" accept="audio/*">
+      <button id="fail-preview">▶ Test</button>
+    </div>
+  </div>
+
+  <div class="footer">v1.1 · no data collected</div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
