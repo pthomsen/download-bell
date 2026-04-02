@@ -17,7 +17,8 @@ zip -r "$OUT" . \
   --exclude "*.DS_Store" \
   --exclude "*/node_modules/*" \
   --exclude "*/tests/*" \
-  --exclude "*/GoogleStoreAssets/*" \
+  --exclude "tests/*" \
+  --exclude "GoogleStoreAssets/*" \
   --exclude "package*.json" \
   --exclude "README.md" \
   --exclude "PRIVACY.md" \
