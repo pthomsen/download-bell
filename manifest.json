@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Download Bell",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Sound notifications for download completion and failure. Custom sounds supported.",
   "permissions": ["downloads", "storage", "offscreen"],
   "background": {

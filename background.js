@@ -46,7 +46,7 @@ async function triggerSound(type) {
 // Errors that are user-initiated, not genuine failures.
 // USER_CANCELLED : explicit cancel button or clearing the downloads list
 // USER_SHUTDOWN  : browser closed mid-download
-const USER_ERRORS = new Set(['USER_CANCELLED', 'USER_SHUTDOWN']);
+const USER_ERRORS = new Set(['USER_CANCELLED', 'USER_CANCELED','USER_SHUTDOWN']);
 
 // Listen to download state changes.
 // 'complete'     → success sound
@@ -56,11 +56,14 @@ chrome.downloads.onChanged.addListener((delta) => {
   if (delta.state.current === 'complete') {
     triggerSound('complete');
   } else if (delta.state.current === 'interrupted') {
+    console.log('[Download Bell] interrupted, error:', delta.error?.current);
     const error = delta.error?.current;
     if (USER_ERRORS.has(error)) return;
     triggerSound('fail');
   }
 });
+
+
 
 // Preview requests from popup
 chrome.runtime.onMessage.addListener((msg) => {

@@ -1,13 +1,13 @@
-Download Bell plays a sound when a browser download completes or fails — 
+Download Bell plays a sound when a browser download completes or fails - 
 so you can walk away from large downloads without constantly checking back.
 
 FEATURES
-- Custom sounds — upload any MP3, WAV, OGG, or AAC file for success and failure
-- Per-file volume trim — balance loud/quiet files without touching master volume
+- Custom sounds - upload any MP3, WAV, OGG, or AAC file for success and failure
+- Per-file volume trim - balance loud/quiet files without touching master volume
 - Master volume control
 - Enable/disable toggle
 - Works in Chrome, Brave, and Opera
-- No data collected — all settings stored locally in your browser
+- No data collected - all settings stored locally in your browser
 
 SOUNDS THAT TRIGGER A NOTIFICATION
 - Download completed → success sound
